@@ -1,11 +1,38 @@
 const Walker = require('../models/WalkerModel');
+const sequelize = require('../config/db');
 
 const getAllWalkers = async (req, res) => {
     try {
         const walkers = await Walker.findAll();
+        console.log(walkers);
         res.json(walkers);
         // res.status(200).json(walkers);
     } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+const getWalker = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const walker = await Walker.findOne({
+            where: {
+                id: id
+            }
+        });
+        console.log(walker);
+        if (walker) {
+            res.json(walker);
+        }
+        else {
+            console.log('ID:', req.params.id);
+            console.log('Type of ID:', typeof req.params.id);
+            res.status(404).json({ message: 'Walker not found' });
+            // res.status(200).json(walkers);
+        } 
+    } catch (err) {
+
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
@@ -22,6 +49,7 @@ const getAllWalkers = async (req, res) => {
 // };
 
 module.exports = {
-     getAllWalkers, 
+     getAllWalkers,
+     getWalker, 
     //  createWalker
 };

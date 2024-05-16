@@ -20,7 +20,7 @@ const sequelize = new Sequelize(
 //app routes
 app.use(express.json());
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello World! Click here to go see the Walkers <a href="/walkers">Walkers</a>');
 });
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
 app.use('/', walkerRoutes);
