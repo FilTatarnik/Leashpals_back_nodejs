@@ -2,7 +2,7 @@ require('dotenv').config();
 // const {createServer} = require('node:http');
 const express = require('express');
 const { Sequelize } = require('sequelize');
-// const walkerRoutes = require('./routes/walkerRoutes');
+const walkerRoutes = require('./routes/walkerRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '127.0.0.1';
@@ -17,18 +17,30 @@ const sequelize = new Sequelize(
     dialect: 'postgres',
   }
 );
+//app routes
 app.use(express.json());
-// app.use('/api', walkerRoutes);
-// app.get('/', (req, res) => res.send('Hello World!'))
-// app.listen(PORT, () => console.log(`Example app listening on port ${port}!`))
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
+app.use('/', walkerRoutes);
 
-sequelize.sync()
-  .then(() => {
-    app.listen(PORT, HOST, () => {
-      console.log(`Server is running at http://${HOST}:${PORT}/`);
-    });
-  })
-  .catch(err => {
-    console.error('Unable to sync database:', err);
-  })
+sequelize.authenticate()
+  .then(() => console.log('Database connection has been established successfully.'))
+  .catch(error => console.error('Unable to connect to the database:', error));
+
+// sequelize.sync()
+//   .then(() => {
+//     app.listen(PORT, HOST, () => {
+//       console.log(`Server is running at http://${HOST}:${PORT}/`);
+//     });
+//   })
+//   .catch(err => {
+//     console.error('Unable to sync database:', err);
+//   })
+
+module.exports = {
+  PORT,
+  HOST,
+}
 
