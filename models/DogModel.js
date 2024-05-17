@@ -3,6 +3,7 @@ const { DataTypes, INTEGER, STRING } = require('sequelize');
 const { Owner } = require('./OwnerModel');
 const { Appointment } = require('./AppointmentModel');
 const { Walkers } = require('./WalkerModel');
+require('dotenv').config();
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -16,6 +17,11 @@ const sequelize = new Sequelize(
 );
 
 const Dog = sequelize.define('Dog', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
     name: {
         type: DataTypes,STRING,
         allowNull:false,
@@ -38,5 +44,7 @@ const Dog = sequelize.define('Dog', {
     }
 
 })
+
+// Dog.hasOne(Owner, { as: 'owner', foreignKey: 'owner_id' });
 
 module.exports = Dog;

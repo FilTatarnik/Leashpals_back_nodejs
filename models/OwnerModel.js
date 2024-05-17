@@ -1,6 +1,7 @@
 const { Sequelize } = require("../config/db");
 const { DataTypes, STRING, INTEGER } = require('sequelize');
 const { Dog } = require('./DogModel');
+require('dotenv').config();
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -14,6 +15,11 @@ const sequelize = new Sequelize(
 );
 
 const Owner = sequelize.define('Owner', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
     name: {
         type: DataTypes.STRING,
         allowNull:false,

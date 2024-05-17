@@ -3,6 +3,7 @@ const { DataTypes, INTEGER, DATE } = require('sequelize');
 const { Dog } = require('./DogModel');
 const { Owner } = require('./OwnerModel');
 const { Walker } = require('./WalkerModel');
+require('dotenv').config();
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -16,6 +17,11 @@ const sequelize = new Sequelize(
 );
 
 const Appointment = sequelize.define('Appointment', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
     data: {
         type: DataTypes.DATE,
         allowNull:false,
