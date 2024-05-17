@@ -22,10 +22,6 @@ const Appointment = sequelize.define('Appointment', {
         autoIncrement: true,
         primaryKey: true,
     },
-    data: {
-        type: DataTypes.DATE,
-        allowNull:false,
-    },
     dog_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
