@@ -2,9 +2,10 @@ require('dotenv').config();
 // const {createServer} = require('node:http');
 const express = require('express');
 const { Sequelize } = require('sequelize');
-const walkerRoutes = require('./routes/walkerRoutes');
-const ownerRoutes = require('./routes/ownerRoutes');
+// const walkerRoutes = require('./routes/walkerRoutes');
+// const ownerRoutes = require('./routes/ownerRoutes');
 const dogRoutes = require('./routes/dogRoutes');
+const userRoutes = require('./routes/userRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '127.0.0.1';
@@ -26,8 +27,9 @@ app.get('/', (req, res) => {
 });
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
 //routes
-app.use('/', walkerRoutes);
-app.use('/', ownerRoutes);
+app.use('/users', userRoutes);
+// app.use('/', walkerRoutes);
+// app.use('/', ownerRoutes);
 app.use('/', dogRoutes);
 
 sequelize.authenticate()
