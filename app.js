@@ -2,7 +2,7 @@ require('dotenv').config();
 // const {createServer} = require('node:http');
 const express = require('express');
 const { Sequelize } = require('sequelize');
-// const walkerRoutes = require('./routes/walkerRoutes');
+const walkerRoutes = require('./routes/walkerRoutes');
 // const ownerRoutes = require('./routes/ownerRoutes');
 const dogRoutes = require('./routes/dogRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -23,12 +23,12 @@ const sequelize = new Sequelize(
 //app routes
 app.use(express.json());
 app.get('/', (req, res) => {
-  res.send('Hello World! Click here to go see the Walkers <a href="/walkers">Walkers</a>');
+  res.send('Hello World! Click here to go see the Users <a href="/users">Users</a>');
 });
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
 //routes
 app.use('/users', userRoutes);
-// app.use('/', walkerRoutes);
+app.use('/users/walkers', walkerRoutes);
 // app.use('/', ownerRoutes);
 app.use('/', dogRoutes);
 

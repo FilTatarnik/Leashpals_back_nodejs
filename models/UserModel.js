@@ -28,6 +28,9 @@ User.init({
   role: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      isIn: [[ 'admin', 'owner', 'walker']],
+    },
   },
 }, {
   sequelize,
