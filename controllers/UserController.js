@@ -1,6 +1,7 @@
 const User = require('../models/UserModel');
 const Owner = require('../models/OwnerModel');
 const Walker = require('../models/WalkerModel');
+const Dog = require('../models/DogModel');
  // Import your User model
 
 //Users
@@ -59,7 +60,11 @@ const getWalker = async (req, res) => {
 //Owners
 const getAllOwners = async (req, res) => {
   try {
-      const owners = await Owner.findAll();
+      const owners = await User.findAll({
+        where: {
+          role: 'owner'
+        }
+      });
       console.log(owners);
       res.json(owners);
   } catch (err) {
@@ -73,7 +78,8 @@ const getOwner = async (req, res) => {
       const id = parseInt(req.params.id, 10);
       const owner = await Owner.findOne({
           where: {
-              id: id
+              id: id,
+              role: 'owner'
           }
       });
       console.log(owner);
@@ -89,4 +95,16 @@ const getOwner = async (req, res) => {
       
   }
 }
-module.exports = { getAllUsers, getAllWalkers, getWalker, getAllOwners, getOwner }; // Export the function
+
+//Dogs
+const getAllDogs = async (req, res) => {
+  try {
+    const dogs = await Dog.findAll();
+    console.log(dogs);
+    res.json(dogs);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+module.exports = { getAllUsers, getAllWalkers, getWalker, getAllOwners, getOwner, getAllDogs }; // Export the function
