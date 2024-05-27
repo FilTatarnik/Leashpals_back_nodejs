@@ -27,10 +27,10 @@ app.get('/', (req, res) => {
 });
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
 //routes
+app.use('/users/walkers', require('./routes/walkerRoutes'));
 app.use('/users', userRoutes);
-app.use('/users/walkers', walkerRoutes);
 // app.use('/', ownerRoutes);
-app.use('/', dogRoutes);
+// app.use('/', dogRoutes);
 
 sequelize.authenticate()
   .then(() => console.log('Database connection has been established successfully.'))

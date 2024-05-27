@@ -1,5 +1,5 @@
 const express = require('express');
-// const { getAllUsers, getOwner, getWalker } = require('../controllers/UserController');
+const { getAllUsers } = require('../controllers/UserController');
 const router = express.Router();
 const { User } = require('../models/UserModel');
 
@@ -7,7 +7,19 @@ const { User } = require('../models/UserModel');
 router.post('/register', async (req, res) => {
     //getting the username, password, email, and role from the request body
     const { username, password, email, role} = req.body;
-
+    try {
+        //if newUser is not defined, then the user creation failed
+        if (!newUser) {
+            console.log('User creation failed');
+            return res.status(500).json({ error: 'User creation failed' });
+        }
+        //send newly created user as response
+        res.json(newUser);
+    } catch (error) {
+        //log error and send response with error message
+        console.log(error);
+        res.status(500).json({ error: 'User creation failed' });
+    }
     //Todo: add validation and error handling here
 
     //create a new user with provided data
@@ -31,8 +43,11 @@ router.post('/login', async (req, res) => {
     
     //redirect to home page based on user role
     
-// router.get('/', getAllUsers);
+//old
+});
+router.get('/', getAllUsers);
 // router.get('/owner', getOwner);
 // router.get('/walker', getWalker);
+
 
 module.exports = router;

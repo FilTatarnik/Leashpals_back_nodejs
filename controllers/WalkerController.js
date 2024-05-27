@@ -3,7 +3,11 @@ const sequelize = require('../config/db');
 
 const getAllWalkers = async (req, res) => {
     try {
-        const walkers = await Walker.findAll();
+        const walkers = await User.findAll({
+            where: {
+                role: 'walkers'
+            }
+        });
         console.log(walkers);
         res.json(walkers);
         // res.status(200).json(walkers);
@@ -18,7 +22,8 @@ const getWalker = async (req, res) => {
         const id = parseInt(req.params.id, 10);
         const walker = await Walker.findOne({
             where: {
-                id: id
+                id: id,
+                role: 'walker'
             }
         });
         console.log(walker);
