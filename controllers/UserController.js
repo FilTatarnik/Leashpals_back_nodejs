@@ -107,4 +107,7 @@ const getAllDogs = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 }
+
+//Appointments
+
 module.exports = { getAllUsers, getAllWalkers, getWalker, getAllOwners, getOwner, getAllDogs }; // Export the function

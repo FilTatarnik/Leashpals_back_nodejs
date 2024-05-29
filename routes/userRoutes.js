@@ -1,13 +1,15 @@
 const express = require('express');
 const { getAllUsers } = require('../controllers/UserController');
 const router = express.Router();
-const { User } = require('../models/UserModel');
+const User = require('../models/UserModel');
 
 // Route for User Registration
 router.post('/register', async (req, res) => {
     //getting the username, password, email, and role from the request body
     const { username, password, email, role} = req.body;
     try {
+    //create a new user with provided data
+    const newUser = await User.create({ username, password, email, role });
         //if newUser is not defined, then the user creation failed
         if (!newUser) {
             console.log('User creation failed');
@@ -22,13 +24,8 @@ router.post('/register', async (req, res) => {
     }
     //Todo: add validation and error handling here
 
-    //create a new user with provided data
-    const newUser = await User.create({ username, password, email, role });
-
     //Todo: add error handling here
 
-    //send the newly created user as response
-    res.json(newUser);
 });
 
 router.post('/login', async (req, res) => {

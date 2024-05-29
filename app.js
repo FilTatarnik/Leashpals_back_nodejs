@@ -1,6 +1,7 @@
 require('dotenv').config();
 // const {createServer} = require('node:http');
 const express = require('express');
+const router = express.Router();
 const { Sequelize } = require('sequelize');
 const walkerRoutes = require('./routes/walkerRoutes');
 const ownerRoutes = require('./routes/ownerRoutes');
@@ -23,6 +24,7 @@ const sequelize = new Sequelize(
 
 //app routes
 app.use(express.json());
+app.use('/api', userRoutes);
 app.get('/', (req, res) => {
   res.send('Hello World! Click here to go see the Users <a href="/users">Users</a> Click here to go see the Walkers <a href="/users/walkers">Walkers</a> Click here to go see the Owners <a href="/users/owners">Owners</a>');
 });
@@ -34,6 +36,7 @@ app.use('/dogs/', require('./routes/dogRoutes'));
 app.use('/users', userRoutes);
 // app.use('/', ownerRoutes);
 app.use('/dogs', dogRoutes);
+
 
 sequelize.authenticate()
   .then(() => console.log('Database connection has been established successfully.'))
