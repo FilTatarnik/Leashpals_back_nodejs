@@ -1,8 +1,17 @@
 const { Sequelize } = require('../config/db');
 const { DataTypes, INTEGER, STRING } = require('sequelize');
 const { Owner } = require('./OwnerModel');
+
 const { Appointment } = require('./AppointmentModel');
 const { Walkers } = require('./WalkerModel');
+const { 
+    PrimaryKey,
+    Attribute,
+    AutoIncrement,
+    NotNull,
+    HasOne,
+    BelongsTo
+   } = require('@sequelize/core/decorators-legacy');
 require('dotenv').config();
 
 const sequelize = new Sequelize(
@@ -20,31 +29,32 @@ const Dog = sequelize.define('Dog', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
+        primaryKey: true
     },
     name: {
         type: DataTypes,STRING,
-        allowNull:false,
+        allowNull:false
     },
     breed: {
         type: DataTypes,STRING,
-        allowNull:false,
+        allowNull:false
     },
     age: {
         type: DataTypes, INTEGER,
-        allowNull: false,
+        allowNull: false
     },
     personality: {
         type: DataTypes, STRING,
-        allowNull: true,
+        allowNull: true
     },
     owner_id: {
         type: DataTypes, INTEGER,
-        allowNull: false,
+        allowNull: false
     }
 
 })
 
-// Dog.hasOne(Owner, { as: 'owner', foreignKey: 'owner_id' });
 
 module.exports = Dog;
+
+// Dog.belongsTo(Owner, { foreignKey: 'owner_id' });
