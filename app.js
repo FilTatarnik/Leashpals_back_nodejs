@@ -7,6 +7,7 @@ const walkerRoutes = require('./routes/walkerRoutes');
 const ownerRoutes = require('./routes/ownerRoutes');
 const dogRoutes = require('./routes/dogRoutes');
 const userRoutes = require('./routes/userRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '127.0.0.1';
@@ -26,16 +27,16 @@ const sequelize = new Sequelize(
 app.use(express.json());
 app.use('/api', userRoutes);
 app.get('/', (req, res) => {
-  res.send('Hello World! Click here to go see the Users <a href="/users">Users</a> Click here to go see the Walkers <a href="/users/walkers">Walkers</a> Click here to go see the Owners <a href="/users/owners">Owners</a>');
+  res.send('Hello World! Click here to go see the Users <a href="/users">Users</a> Click here to go see the Walkers <a href="/users/walkers">Walkers</a> Click here to go see the Owners <a href="/users/owners">Owners</a> Click here to go see the Dogs <a href="/dogs">Dogs</a>. Click here to see the Appointments <a href="/appointments">Appointments</a>')
 });
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
 //routes
+app.use('/appointments', require('./routes/appointmentRoutes'));
 app.use('/users/walkers', require('./routes/walkerRoutes'));
 app.use('/users/owners', require('./routes/ownerRoutes'));
 app.use('/dogs/', require('./routes/dogRoutes'));
 app.use('/users', userRoutes);
 // app.use('/', ownerRoutes);
-app.use('/dogs', dogRoutes);
 
 
 sequelize.authenticate()

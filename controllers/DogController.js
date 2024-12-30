@@ -32,6 +32,6 @@ const getAllDogs = async (req, res) => {
 //     }
 // };
 module.exports = {
-    getAllDogs,
+    getAllDogs
     // getDog,
 }
