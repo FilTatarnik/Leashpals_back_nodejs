@@ -9,7 +9,7 @@ const dogRoutes = require('./routes/dogRoutes');
 const userRoutes = require('./routes/userRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 42069;
 const HOST = process.env.HOST || '127.0.0.1';
 
 // Database connection
