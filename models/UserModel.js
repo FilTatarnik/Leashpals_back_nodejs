@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const bcrypt = require('bcrypt');
 
 class User extends Model {}
 
@@ -16,6 +17,10 @@ User.init({
   password: {
     type: DataTypes.STRING,
     allowNull: false,
+    set(value){
+      const hash = bcrypt.hashSync(value, 10);
+      this.setDataValue('password', hash);
+    }
   },
   email: {
     type: DataTypes.STRING,
