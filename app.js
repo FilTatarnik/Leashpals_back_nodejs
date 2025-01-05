@@ -12,6 +12,8 @@ const User = require('./models/UserModel');
 const app = express();
 const PORT = process.env.PORT || 42069;
 const HOST = process.env.HOST || '127.0.0.1';
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env;
 
 // Database connection
 const sequelize = new Sequelize(
@@ -55,9 +57,32 @@ const authorize = (roles = []) => {
     next();
   }
 }
-
+//Middleware
 app.use(cors()); // Enable CORS for all origins (for development)
 app.use(express.json());
+
+function authenticateToken(req, res, next) {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+
+  if (!token) {
+    return res.status(401).json({ error: 'Token is required' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid token' });
+    }
+
+    const user = await User.findByPk(decoded.id); // Fetch the user from the database
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    req.user = user; // Attach user info to the request
+    next(); // Proceed to the next middleware/route handler
+  });
+}
+
 
 // Routes
 app.use('/api', userRoutes);
@@ -69,6 +94,7 @@ app.use('/users/walkers', require('./routes/walkerRoutes'));
 app.use('/users/owners', require('./routes/ownerRoutes'));
 app.use('/dogs/', require('./routes/dogRoutes'));
 app.use('/users', userRoutes);
+app.use('/me', userRoutes);
 
 // Start server
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
@@ -83,4 +109,5 @@ module.exports = {
   HOST,
   auth,
   authorize,
+  authenticateToken,
 };
