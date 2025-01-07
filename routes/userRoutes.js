@@ -5,7 +5,9 @@ const User = require('../models/UserModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
-const { authenticateToken } = require('../app');
+const authenticateToken = require('../middleware/auth');
+
+console.log('authenticate token', authenticateToken);
 
 // Route for User Registration
 router.post('/register', async (req, res) => {
@@ -47,14 +49,14 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
-// router.get('/users/me', authenticateToken, async (req, res) => {
-//     try {
-//       const user = await User.findByPk(req.user.id);
-//       res.json(user);
-//     } catch (error) {
-//       res.status(500).json({ error: 'Failed to fetch user data' });
-//     }
-// });
+router.get('/users/me', authenticateToken, async (req, res) => {
+    try {
+      const user = await User.findByPk(req.user.id);
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch user data' });
+    }
+});
 router.get('/', getAllUsers);
 
 

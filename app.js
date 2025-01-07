@@ -61,28 +61,6 @@ const authorize = (roles = []) => {
 app.use(cors()); // Enable CORS for all origins (for development)
 app.use(express.json());
 
-function authenticateToken(req, res, next) {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
-  if (!token) {
-    return res.status(401).json({ error: 'Token is required' });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ error: 'Invalid token' });
-    }
-
-    const user = await User.findByPk(decoded.id); // Fetch the user from the database
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    req.user = user; // Attach user info to the request
-    next(); // Proceed to the next middleware/route handler
-  });
-}
-
 
 // Routes
 app.use('/api', userRoutes);
@@ -109,5 +87,4 @@ module.exports = {
   HOST,
   auth,
   authorize,
-  authenticateToken,
 };
