@@ -49,6 +49,11 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+router.post('/logout', async (req, res) => {
+    res.status(200).json({ message: 'Logged out succesfuly' });
+});
+
 router.get('/me', authenticateToken, async (req, res) => {
     try {
       const user = await User.findByPk(req.user.id);
