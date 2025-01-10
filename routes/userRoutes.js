@@ -50,6 +50,35 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.put('/users/:id', async (req, res) => {
+    const { id } = req.params; // User ID from the URL
+    const { username, email, password } = req.body; // Fields to update
+
+    try {
+        // Check if user exists
+        const user = await User.findByPk(id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Update fields if they are provided
+        if (username) user.username = username;
+        if (email) user.email = email;
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+        }
+
+        // Save updated user
+        await user.save();
+
+        res.json({ message: 'User updated successfully', user });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 router.post('/logout', async (req, res) => {
     res.status(200).json({ message: 'Logged out succesfuly' });
 });
