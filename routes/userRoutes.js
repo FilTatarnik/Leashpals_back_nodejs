@@ -50,28 +50,26 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.put('/users/:id', async (req, res) => {
-    const { id } = req.params; // User ID from the URL
-    const { username, email, password } = req.body; // Fields to update
-
+router.put('/:id', async (req, res) => {
+    console.log('PUT request received');
+    console.log('Params:', req.params);
+    console.log('Body:', req.body);
+    const { id } = req.params;
+    const { username, email } = req.body;
+    
     try {
-        // Check if user exists
+        console.log('Looking for user with id:', id);
         const user = await User.findByPk(id);
         if (!user) {
+            console.log('User not found');
             return res.status(404).json({ error: 'User not found' });
         }
-
-        // Update fields if they are provided
+        
+        console.log('Found user:', user);
         if (username) user.username = username;
         if (email) user.email = email;
-        if (password) {
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(password, salt);
-        }
-
-        // Save updated user
+        
         await user.save();
-
         res.json({ message: 'User updated successfully', user });
     } catch (error) {
         console.error('Error updating user:', error);

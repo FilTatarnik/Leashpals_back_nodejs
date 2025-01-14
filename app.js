@@ -64,8 +64,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/users', userRoutes);
-app.use('/api', router);
+// app.use('/users', userRoutes);
+// app.use('/api', router);
 app.get('/', (req, res) => {
   res.send(
     'Hello World! Click here to go see the Users <a href="/users">Users</a> \nClick here to go see the Walkers <a href="/users/walkers">Walkers</a> Click here to go see the Owners <a href="/users/owners">Owners</a> Click here to go see the Dogs <a href="/dogs">Dogs</a>. Click here to see the Appointments <a href="/appointments">Appointments</a>')
@@ -74,7 +74,7 @@ app.use('/appointments', require('./routes/appointmentRoutes'));
 app.use('/users/walkers', require('./routes/walkerRoutes'));
 app.use('/users/owners', require('./routes/ownerRoutes'));
 app.use('/dogs/', require('./routes/dogRoutes'));
-app.use('/me', userRoutes);
+// app.use('/me', userRoutes);
 
 // Start server
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
