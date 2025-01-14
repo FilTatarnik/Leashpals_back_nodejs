@@ -11,27 +11,26 @@ const getAllDogs = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 }
-// const getDog = async (req, res) => {
-//     try {
-//         const dog = await Dog.findOne({
-//             where: {
-//                 id: id
-//             }
-//         });
-//         console.log(dog);
-//         if (dog) {
-//             res.json(dog);
-//         }
-//         else {
-//             console.log('ID:', req.params.id);
-//             console.log('Type of ID:', typeof req.params.id);
-//             res.status(404).json({ message: 'Dog not found' });
-//         }
-//     } catch (err) {
-        
-//     }
-// };
+const getDog = async (req, res) => {
+    try {
+        const id = req.params.id; // Extract the ID from route parameters
+        const dog = await Dog.findOne({
+            where: { id }
+        });
+
+        if (!dog) {
+            console.log('ID:', req.params.id);
+            console.log('Type of ID:', typeof req.params.id);
+            return res.status(404).json({ message: 'Dog not found' });
+        }
+
+        res.json(dog); // Send the dog data as the response
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch Dog data' });
+    }
+};
 module.exports = {
-    getAllDogs
-    // getDog,
+    getAllDogs,
+    getDog,
 }
