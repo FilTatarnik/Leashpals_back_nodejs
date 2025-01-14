@@ -12,6 +12,21 @@ const getAllAppointments = async (req, res) => {
     }
 }
 
+const getAppointment = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const appointment = await Appointment.findOne({
+            where: { id }
+        });
+
+        if (!appointment) {
+            console.log('ID: ', req.params.id);
+            
+        }
+    } catch (error) {
+        
+    }
+}
 module.exports = {
     getAllAppointments,
 }

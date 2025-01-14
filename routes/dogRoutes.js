@@ -50,4 +50,22 @@ router.put('/:id', ensureOwner, async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+//Remove Dog
+router.delete('/:id', ensureOwner, async ( req, res) => {
+    const { id } = req.params;
+    try {
+        console.log('Trying to Delete Dog with id:', id);
+        const dog = await Dog.findByPk(id);
+        if(!dog){
+            console.log('Dog not found.');
+            return res.status(404).json({ error: 'Dog not found'});
+        } 
+        console.log('Dog found: ', dog);
+        await dog.destroy();
+        res.json({ message: 'Dog Deleted Successfully!', dog});
+    } catch (error) {
+        console.log('Error deleting Dog', error);
+        res.status(500).json({ error: 'Server error '});
+    }
+});
 module.exports = router;
