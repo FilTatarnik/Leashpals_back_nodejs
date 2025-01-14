@@ -8,7 +8,13 @@ const router = express.Router();
 router.get('/', getAllAppointments);
 
 //GET Appointment by ID
-router.get('/:id', getAppointment);
+router.get('/:id', getAppointment, (req, res) => {
+    res.json(req.appointment);  // Return the single appointment found
+});
+// GET Appointment by Walker_id
+router.get('/walker/:walker_id', getAppointment, (req, res) => {
+    res.json(req.appointment);  // Return the list of appointments for the walker
+});
 // PUT Update Appointment
 router.put('/:id', getAppointment, async (req, res) => {
     console.log('PUT request received');

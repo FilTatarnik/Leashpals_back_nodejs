@@ -14,18 +14,29 @@ const getAllAppointments = async (req, res) => {
 
 const getAppointment = async (req, res, next) => {
     try {
-        const id = req.params.id;
-        const appointment = await Appointment.findOne({
-            where: { id }
-        });
+        const { id, walker_id } = req.params;
 
-        if (!appointment) {
-            console.log('ID: ', req.params.id);
-            console.log('Type of ID: ', typeof req.params.id);
-            return res.status(404).json({ message: 'Appointment not found' });
+        let appointment;
+        // Check if the request is for an appointment by 'id'
+        if (id) {
+            appointment = await Appointment.findOne({
+                where: { id }
+            });
+        } 
+        // Check if the request is for appointments by 'walker_id'
+        else if (walker_id) {
+            appointment = await Appointment.findAll({
+                where: { walker_id }
+            });
         }
 
-        // Add appointment to request object to use in the next route
+        if (!appointment || (Array.isArray(appointment) && appointment.length === 0)) {
+            console.log('ID:', id || walker_id);
+            console.log('Type of ID:', typeof (id || walker_id));
+            return res.status(404).json({ message: 'Appointment(s) not found' });
+        }
+
+        // Add appointment(s) to request object to use in the next route
         req.appointment = appointment;
         next(); // Proceed to the next middleware or route handler
     } catch (error) {
@@ -33,6 +44,7 @@ const getAppointment = async (req, res, next) => {
         res.status(500).json({ message: 'Failed to fetch Appointment' });
     }
 };
+
 
 module.exports = {
     getAllAppointments,
