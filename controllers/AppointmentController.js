@@ -12,7 +12,7 @@ const getAllAppointments = async (req, res) => {
     }
 }
 
-const getAppointment = async (req, res) => {
+const getAppointment = async (req, res, next) => {
     try {
         const id = req.params.id;
         const appointment = await Appointment.findOne({
@@ -22,14 +22,18 @@ const getAppointment = async (req, res) => {
         if (!appointment) {
             console.log('ID: ', req.params.id);
             console.log('Type of ID: ', typeof req.params.id);
-            return res.status(404).json({ message: 'Appointment not found'});
+            return res.status(404).json({ message: 'Appointment not found' });
         }
-        res.json(appointment);
+
+        // Add appointment to request object to use in the next route
+        req.appointment = appointment;
+        next(); // Proceed to the next middleware or route handler
     } catch (error) {
-        console.log(err);
-        res.status(500).json({ message: 'Failed to fetch Appointment'});
+        console.log(error);  // Corrected error logging
+        res.status(500).json({ message: 'Failed to fetch Appointment' });
     }
 };
+
 module.exports = {
     getAllAppointments,
     getAppointment,

@@ -9,7 +9,27 @@ router.get('/', getAllAppointments);
 
 //GET Appointment by ID
 router.get('/:id', getAppointment);
+// PUT Update Appointment
+router.put('/:id', getAppointment, async (req, res) => {
+    console.log('PUT request received');
+    console.log('Params:', req.params);
+    console.log('Body:', req.body);
 
+    const { dog_id, walker_id } = req.body;
+    const appointment = req.appointment;  // Now using the appointment from the middleware
+
+    try {
+        console.log('Looking for Appointment with ID: ', req.params.id);
+        if (dog_id) appointment.dog_id = dog_id;
+        if (walker_id) appointment.walker_id = walker_id;
+
+        await appointment.save();
+        res.json({ message: 'Appointment updated successfully!', appointment });
+    } catch (error) {
+        console.log('Error updating appointment: ', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 //POST create Appointment
 router.post('/register', async (req, res) => {
     const { dog_id, walker_id } = req.body;
@@ -25,4 +45,6 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ error: 'Appointment creation failed.'});
     }
 });
+
+
 module.exports = router;
