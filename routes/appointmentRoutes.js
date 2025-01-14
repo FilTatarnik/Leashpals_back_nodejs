@@ -45,6 +45,23 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ error: 'Appointment creation failed.'});
     }
 });
-
+//DELETE appointment
+router.delete('/:id', getAppointment, async( req, res) => {
+    const { id } = req.params;
+    try {
+        console.log('Trying to Delete Appointment with id:', id);
+        const appointment = await Appointment.findByPk(id);
+        if(!appointment){
+            console.log('appointment not found.');
+            return res.status(404).json({ error: 'appointment not found'});
+        } 
+        console.log('appointment found: ', appointment);
+        await appointment.destroy();
+        res.json({ message: 'appointment Deleted Successfully!', appointment});
+    } catch (error) {
+        console.log('Error deleting appointment', error);
+        res.status(500).json({ error: 'Server error '});
+    }
+});
 
 module.exports = router;
