@@ -1,5 +1,7 @@
 const express = require('express');
+const AppointmentController = require('../controllers/AppointmentController');
 const { getAllUsers } = require('../controllers/UserController');
+const { getAppointmentByOwnerId, getAppointmentByWalkerId} = require('../controllers/AppointmentController');
 const router = express.Router();
 const User = require('../models/UserModel');
 const bcrypt = require('bcrypt');
@@ -94,9 +96,9 @@ router.get('/me', authenticateToken, async (req, res) => {
     }
   });
 router.get('/', getAllUsers);
-
-
-  
+//Get Appointment by OwnerId
+router.get('/owner/:id', AppointmentController.getAppointmentByOwnerId); 
+router.get('/walker/:id', AppointmentController.getAppointmentByWalkerId);   
 
 // router.get('/owner', getOwner);
 // router.get('/walker', getWalker);

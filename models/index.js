@@ -8,25 +8,25 @@ const Owners = require('./OwnerModel.js');
 
 
 // Each Appointment belongs to one Walker
-Appointments.belongsTo(Walkers, { foreignKey: 'walkerId', onDelete: 'CASCADE' });
+Appointments.belongsTo(Walkers, { foreignKey: 'walker_Id', onDelete: 'CASCADE' });
 
 // Each Appointment belongs to one Dog
-Appointments.belongsTo(Dogs, { foreignKey: 'dogId', onDelete: 'CASCADE' });
+Appointments.belongsTo(Dogs, { foreignKey: 'dog_Id', onDelete: 'CASCADE' });
 
 // Each Appointment belongs to one Owner
-Appointments.belongsTo(Owners, { foreignKey: 'ownerId', onDelete: 'CASCADE' });
+Appointments.belongsTo(Owners, { foreignKey: 'owner_Id', onDelete: 'CASCADE' });
 
 // An Owner can have many Dogs
-Owners.hasMany(Dogs, { foreignKey: 'ownerId', onDelete: 'CASCADE' });
+Owners.hasMany(Dogs, { foreignKey: 'owner_Id', onDelete: 'CASCADE' });
 
 // An Owner can have many Appointments
-Owners.hasMany(Appointments, { foreignKey: 'ownerId', onDelete: 'CASCADE' });
+Owners.hasMany(Appointments, { foreignKey: 'owner_Id', onDelete: 'CASCADE' });
 
 // A Walker can have many Appointments
-Walkers.hasMany(Appointments, { foreignKey: 'walkerId', onDelete: 'CASCADE' });
+Walkers.hasMany(Appointments, { foreignKey: 'walker_Id', onDelete: 'CASCADE' });
 
 // A Dog can have one Appointments
-Dogs.hasOne(Appointments, { foreignKey: 'dogId', onDelete: 'CASCADE' });
+Dogs.hasOne(Appointments, { foreignKey: 'dog_Id', onDelete: 'CASCADE' });
 
 module.exports = {
     sequelize,

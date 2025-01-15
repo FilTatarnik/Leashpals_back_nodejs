@@ -36,7 +36,7 @@ const getDogByOwnerId = async (req, res) => {
         const ownerId = req.params.id;
         const dog = await Dog.findAll({ where:{owner_id: ownerId }});
         if(!dog.length){
-            console.log('Owner ID:', ownerID);
+            console.log('Owner ID:', ownerId);
             return res.status(404).json({ message: 'No dogs found for this owner' });
         }
         res.json(dog);
