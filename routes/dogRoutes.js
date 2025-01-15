@@ -9,6 +9,8 @@ const router = express.Router();
 router.get('/', DogController.getAllDogs);
 //Get Dog by ID
 router.get('/:id', DogController.getDog);
+//Get Dog by OwnerID
+router.get('/owner/:id', DogController.getDogByOwnerId);
 //Route for Dog Registration/Creation?
 router.post('/register', ensureOwner, async (req, res) => {
     const { name, breed, age, personality, owner_id} = req.body;

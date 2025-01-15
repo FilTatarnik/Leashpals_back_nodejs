@@ -30,7 +30,23 @@ const getDog = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch Dog data' });
     }
 };
+
+const getDogByOwnerId = async (req, res) => {
+    try {
+        const ownerId = req.params.id;
+        const dog = await Dog.findAll({ where:{owner_id: ownerId }});
+        if(!dog.length){
+            console.log('Owner ID:', ownerID);
+            return res.status(404).json({ message: 'No dogs found for this owner' });
+        }
+        res.json(dog);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: 'Failed to fetch Dog Owner Data'});
+    }
+};
 module.exports = {
     getAllDogs,
     getDog,
+    getDogByOwnerId,
 }
