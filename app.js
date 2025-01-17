@@ -66,7 +66,7 @@ const authorize = (roles = []) => {
   }
 }
 //Middleware
-app.use(cors()); // Enable CORS for all origins (for development)
+app.use(cors({ origin: 'http://localhost:3000', credentials: true })); // Enable CORS for all origins (for development)
 app.use(express.json());
 // Routes
 app.use('/api/users', userRoutes);
