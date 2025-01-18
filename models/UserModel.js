@@ -40,7 +40,7 @@ User.init({
 }, {
   sequelize,
   modelName: 'User',
-  tableName: 'Users', // Specify the table name
+  tableName: 'Users', // a the table name
   freezeTableName: true, // This ensures that the table name is not pluralized
   timestamps: false, // This ensures that timestamps are not created
 });
