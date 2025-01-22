@@ -57,6 +57,40 @@ const getWalker = async (req, res) => {
   }
 };
 
+const registerUser = async (req, res) => {
+  const { username, email, password, role } = req.body;
+  try {
+    if (!username || !email || !password || !role) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, email, password: hashedPassword, role });
+    res.status(201).json({ message: 'User registered successfully', user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 //Owners
 const getAllOwners = async (req, res) => {
   try {
@@ -110,4 +144,4 @@ const getAllDogs = async (req, res) => {
 
 //Appointments
 
-module.exports = { getAllUsers, getAllWalkers, getWalker, getAllOwners, getOwner, getAllDogs }; // Export the function
+module.exports = { getAllUsers, getAllWalkers, getWalker, getAllOwners, getOwner, getAllDogs,registerUser, loginUser }; // Export the function
