@@ -1,0 +1,25 @@
+FROM deepseek-r1:8b
+
+SYSTEM """
+Project: LeashPals Backend
+Location: E:\coding\leashpals2\leashpal_back_nodejs
+Stack: Node.js Backend
+Context: This is the backend service for the LeashPals application.
+
+The project structure and files from E:\coding\leashpals2\leashpal_back_nodejs should be considered as reference context for all responses.
+"""
+
+TEMPLATE """{{- if .System }}{{ .System }}{{ end }}
+{{- range $i, $_ := .Messages }}
+{{- $last := eq (len (slice $.Messages $i)) 1}}
+{{- if eq .Role "user" }}<|User|>{{ .Content }}
+{{- else if eq .Role "assistant" }}<|Assistant|>{{ .Content }}{{- if not $last }}<|end_of_sentence|>{{- end }}
+{{- end }}
+{{- if and $last (ne .Role "assistant") }}<|Assistant|>{{- end }}
+{{- end }}"""
+
+PARAMETER stop <|begin_of_sentence|>
+PARAMETER stop <|end_of_sentence|>
+PARAMETER stop <|User|>
+PARAMETER stop <|Assistant|>
+
