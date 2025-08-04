@@ -29,10 +29,23 @@ const Appointment = sequelize.define('Appointment', {
     walker_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+    },
+    date: {
+        type: DataTypes.DATEONLY, // Correct type for just the date
+        allowNull: false,
+    },
+    time: {
+        type: DataTypes.TIME, // Correct type for time only
+        allowNull: false,
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'scheduled'
     }
+}, {
+    tableName: 'Appointments',
+    timestamps: true, // createdAt and updatedAt
 });
-
-// Appointment.belongsTo(Walker, { foreignKey: 'walker.id', onDelete: 'CASCADE'});
-// Appointment.belongsTo(Dog, {foreignKey: 'dog.id', onDelete: 'CASCADE' });
 
 module.exports = Appointment;

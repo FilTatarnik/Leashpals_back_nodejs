@@ -36,21 +36,38 @@ router.put('/:id', getAppointment, async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
-//POST create Appointment
+// POST create Appointment
 router.post('/register', async (req, res) => {
-    const { dog_id, walker_id } = req.body;
+    const { dog_id, walker_id, datetime } = req.body;
+
     try {
-        const newAppointment = await Appointment.create({ dog_id, walker_id });
-            if (!newAppointment) {
-                console.log('Appointment Creation Failed');
-                return res.status(500).json({ error: 'Appointment creation failed' });
-            }
-            res.json(newAppointment);
+        if (!dog_id || !walker_id || !datetime) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        const dt = new Date(datetime);
+        if (isNaN(dt.getTime())) {
+            return res.status(400).json({ message: 'Invalid datetime format' });
+        }
+
+        const dateOnly = dt.toISOString().split('T')[0]; // YYYY-MM-DD
+        const timeOnly = dt.toTimeString().split(' ')[0]; // HH:MM:SS
+
+        const newAppointment = await Appointment.create({
+            dog_id,
+            walker_id,
+            date: dateOnly,
+            time: timeOnly,
+            status: 'scheduled',
+        });
+
+        res.status(201).json(newAppointment);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Appointment creation failed.'});
+        res.status(500).json({ error: 'Appointment creation failed.' });
     }
 });
+
 //DELETE appointment
 router.delete('/:id', getAppointment, async( req, res) => {
     const { id } = req.params;
