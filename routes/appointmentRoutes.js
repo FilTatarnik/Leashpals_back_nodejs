@@ -36,6 +36,30 @@ router.put('/:id', getAppointment, async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+// PATCH for Status Update
+router.patch('/:id', getAppointment, async (req, res) => {
+    console.log('PATCH request recieved for status update');
+    const { status } = req.body;
+    const appointment = req.appointment;  // Fetched by getAppointment middleware
+
+    try {
+        if (!status) {
+            return res.status(400).json({ message: 'Missing required status field' });
+        }
+
+        // Update ONLY the status field
+        appointment.status = status;
+
+        await appointment.save();
+        res.json({ message: 'Appointment status updated successfully!', appointment });
+    } catch (error) {
+        console.log('Error updating appointment status: ', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
 // POST create Appointment
 router.post('/register', async (req, res) => {
     const { dog_id, walker_id, datetime } = req.body;
