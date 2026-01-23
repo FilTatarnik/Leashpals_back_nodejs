@@ -52,12 +52,12 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
     console.log('PUT request received');
     console.log('Params:', req.params);
     console.log('Body:', req.body);
     const { id } = req.params;
-    const { username, email } = req.body;
+    const { username, email, newPassword, currentPassword } = req.body;
     
     try {
         console.log('Looking for user with id:', id);
@@ -66,10 +66,21 @@ router.put('/:id', async (req, res) => {
             console.log('User not found');
             return res.status(404).json({ error: 'User not found' });
         }
+
+        // Verify current password before allowing updates
+        if (!currentPassword) {
+            return res.status(400).json({ error: 'Current password is required to make changes' });
+        }
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Current password is incorrect' });
+        }
         
         console.log('Found user:', user);
         if (username) user.username = username;
         if (email) user.email = email;
+        if (newPassword) user.password = newPassword; // The model's setter will hash it
         
         await user.save();
         res.json({ message: 'User updated successfully', user });
